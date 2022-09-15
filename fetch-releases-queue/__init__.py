@@ -62,8 +62,7 @@ def main(msg: func.QueueMessage) -> None:
                     path = urlparse(download_url).path
                     file_name = basename(path)
 
-                    #blob_url = upload_file(download_url, file_name)
-                    blob_url = download_url
+                    blob_url = upload_file(download_url, file_name)
 
                     asset_data = {
                         "name": get_common_app_name(repo["repo_name"]),
@@ -76,7 +75,7 @@ def main(msg: func.QueueMessage) -> None:
 
                     app_data.append(asset_data)
 
-                #upload_app_data(app_data)
+                upload_app_data(app_data)
 
         except Exception as e:
             print(e)
