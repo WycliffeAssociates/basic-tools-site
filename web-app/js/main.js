@@ -13,7 +13,6 @@ function renderContents(data) {
         if (!container.contains(appContainer)) {
             container.appendChild(appContainer);
         }
-        console.log(app);
     });
 }
 
