@@ -35,14 +35,14 @@ function createAppContainer(data) {
 }
 
 function createAssetContainer(data) {
-    let assetContainer = document.createElement("div");
+    const assetContainer = document.createElement("div");
     assetContainer.className = "asset";
 
-    let osIcon = document.createElement("img");
+    const osIcon = document.createElement("img");
     osIcon.src = "images/os/" + data.os + ".png";
     osIcon.height = 50;
 
-    let downloadButton = document.createElement("a");
+    const downloadButton = document.createElement("a");
     downloadButton.href = data.url;
     downloadButton.className = "downloadButton";
     downloadButton.textContent = "Download";
