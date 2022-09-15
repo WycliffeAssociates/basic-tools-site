@@ -10,7 +10,6 @@ from urllib.parse import urlparse
 import azure.functions as func
 from azure.storage.blob import BlobServiceClient
 
-ext_regex = re.compile(".(dmg|exe|deb|zip|AppImage|apk|jar)$", re.I)
 repos = [
     {
         "user_name": "Bible-Translation-Tools",
@@ -55,7 +54,7 @@ def main(msg: func.QueueMessage) -> None:
                 
                 for asset in release["assets"]:
                     download_url = asset["browser_download_url"]
-                    if not ext_regex.search(download_url):
+                    if not re.search(".(dmg|exe|deb|zip|AppImage|apk|jar)$", download_url, flags=re.I):
                         continue
 
                     logging.info(f'Downloading: {download_url}')
