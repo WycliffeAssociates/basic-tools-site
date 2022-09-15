@@ -1,4 +1,4 @@
-fetch("http://localhost:7071/api/get-app-data")
+fetch("api/get-app-data")
     .then((response) => response.json())
     .then((data) => renderContents(data));
 
