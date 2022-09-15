@@ -3,6 +3,7 @@ import logging
 from os import environ
 from os.path import basename, splitext
 import re
+from sys import flags
 from typing import List
 from urllib import request
 from urllib.parse import urlparse
@@ -28,8 +29,8 @@ repos = [
         "repo_name": "BTT-Exchanger"
     },
     {
-        "user_name": "WycliffeAssociates",
-        "repo_name": "tr-chunk-browser"
+        "user_name": "Bible-Translation-Tools",
+        "repo_name": "USFM-Converter"
     }
 ]
 
@@ -61,16 +62,15 @@ def main(msg: func.QueueMessage) -> None:
 
                     path = urlparse(download_url).path
                     file_name = basename(path)
-                    extension = splitext(path)[1]
 
                     blob_url = upload_file(download_url, file_name)
 
                     asset_data = {
-                        "name": repo["repo_name"],
+                        "name": get_common_app_name(repo["repo_name"]),
                         "version": release["tag_name"],
                         "size": asset["size"],
                         "date": asset["updated_at"],
-                        "os": get_os_from_exension(extension),
+                        "os": get_os_from_path(path),
                         "url": blob_url
                     }
 
@@ -81,14 +81,46 @@ def main(msg: func.QueueMessage) -> None:
         except Exception as e:
             print(e)
 
-def get_os_from_exension(ext: str) -> str:
+def get_os_from_path(path: str) -> str:
     """Return the os name based on file extension"""
     os = "Unknown"
+    
+    file_name = basename(path)
+    extension = splitext(path)[1]
+    
+    os = get_os_from_filename(file_name)
+
+    if os == "Unknown":
+        os = get_os_from_extension(extension)
+
+    return os
+
+def get_os_from_filename(file_name: str) -> str:
+    """Get OS name from file path"""
+
+    os = "Unknown"
+
+    if re.search("(osx|macos)", file_name, flags=re.I):
+        os = "Osx"
+    elif re.search("(windows|win)", file_name, re.I):
+        os = "Windows"
+    elif re.search("linux", file_name, re.I):
+        os = "Linux"
+    elif re.search("android", file_name, re.I):
+        os = "Android"
+
+    return os
+
+
+def get_os_from_extension(ext: str) -> str:
+    """Get OS name from file extension"""
+    os = "Unknown"
+
     if ext == ".exe":
         os = "Windows"
     elif ext == ".dmg":
-        os = "MacOS"
-    elif ext == ".AppImage" or ext == ".deb":
+        os = "Osx"
+    elif ext in (".AppImage", ".deb"):
         os = "Linux"
     elif ext == ".apk":
         os = "Android"
@@ -122,3 +154,11 @@ def upload_file(url: str, file_name: str) -> str:
     except Exception as e:
         logging.info(e)
         return None
+
+def get_common_app_name(name: str) -> str:
+    """Get common name of the app"""
+    app_name = name
+    if app_name in ("BTT-Writer-Android", "BTT-Writer-Desktop"):
+        app_name = "BTT-Writer"
+    
+    return app_name
