@@ -13,6 +13,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Getting app_data.json')
 
     blob_client = blob_service_client.get_container_client(container=CONTAINER_NAME)
-    app_data = blob_client.download_blob("app_data.json").readall()
+
+    app_data = "{}"
+
+    try:
+        app_data = blob_client.download_blob("app_data.json").readall()
+    except Exception as e:
+        logging.info(e)
 
     return func.HttpResponse(app_data, mimetype="application/json")

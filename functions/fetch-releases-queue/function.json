@@ -6,7 +6,7 @@
       "type": "queueTrigger",
       "direction": "in",
       "queueName": "fetch-releases",
-      "connection": ""
+      "connection": "AzureWebJobsStorage"
     }
   ]
 }

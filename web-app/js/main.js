@@ -1,4 +1,6 @@
-fetch("api/get-app-data")
+import api from './config.js'
+
+fetch(`${api}/get-app-data`)
     .then((response) => response.json())
     .then((data) => renderContents(data));
 
