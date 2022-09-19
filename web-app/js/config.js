@@ -1,3 +1,3 @@
-const API = "https://tools-releases.azurewebsites.net/api";
+const API = "https://basicttdlpage-func-nonprod-use2.azurewebsites.net/api";
 
 export { API as default };
