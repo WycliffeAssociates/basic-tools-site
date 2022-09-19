@@ -1,13 +1,19 @@
+img {
+    max-width: 100%;
+}
 body {
     padding: 0;
     margin: 0;
 }
+
 
 #main {
     display: flex;
     flex-direction: column;
     gap: 50px;
 }
+
+
 
 #header {
     height: 80px;
@@ -21,45 +27,65 @@ body {
     box-shadow: rgba(0, 0, 0, 0.55) 0px 5px 15px;
 }
 
+
+
 #info {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
+
+
 .infoTitle {
     font-size: 50px;
     font-weight: bold;
 }
+
+
 
 .infoDescription {
     font-size: 30px;
     color: rgb(99, 99, 99);
 }
 
+
+
 #tools {
-    display: flex;
     gap: 50px;
+    display: grid;
+    padding: 0 64px;
+    grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
     justify-content: center;
 }
 
+
+
+
 .appContainer {
     border-radius: 6px;
-    box-shadow: rgba(0, 0, 0, 0.55) 0px 5px 15px;
+    box-shadow: rgba(0, 0, 0, 0.25) 1.1px 2.2px 9.3px 3px;
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
+
+
 .asset {
     display: flex;
     gap: 20px;
 }
 
+
+
 .appContainer > img {
     margin-bottom: 50px;
+  object-fit: contain
 }
+
+
 
 .downloadButton {
     box-shadow: inset 0px 1px 0px 0px #54a3f7;
@@ -67,7 +93,8 @@ body {
     background-color: #007dc1;
     border-radius: 6px;
     border: 1px solid #124d77;
-    display: inline-block;
+      display: flex;
+    align-items: center;
     cursor: pointer;
     color: #ffffff;
     font-family: Arial;
@@ -77,10 +104,14 @@ body {
     text-shadow: 0px 1px 0px #154682;
 }
 
+
+
 .downloadButton:hover {
     background: linear-gradient(to bottom, #0061a7 5%, #007dc1 100%);
     background-color: #0061a7;
 }
+
+
 
 .downloadButton:active {
     position: relative;
