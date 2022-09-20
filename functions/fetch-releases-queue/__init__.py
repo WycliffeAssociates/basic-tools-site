@@ -87,7 +87,7 @@ def main(msg: func.QueueMessage) -> None:
     upload_app_data(app_data)
 
 def get_os_from_path(path: str) -> str:
-    """Return the os name based on file extension"""
+    """Return the os name based on file path"""
     os = "Unknown"
     
     file_name = basename(path)
@@ -101,7 +101,7 @@ def get_os_from_path(path: str) -> str:
     return os
 
 def get_os_from_filename(file_name: str) -> str:
-    """Get OS name from file path"""
+    """Get OS name from file name"""
 
     os = "Unknown"
 
