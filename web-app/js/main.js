@@ -5,6 +5,8 @@ fetch(`${api}/get-app-data`)
     .then((data) => renderContents(data));
 
 function renderContents(data) {
+    document.querySelector("#loader").style.display = "none";
+    
     const container = document.querySelector("#tools");
     data.map((app) => {
         const appContainer = createAppContainer(app);
@@ -30,7 +32,12 @@ function createAppContainer(data) {
         appIcon.src = "images/tools/" + data.name + ".png";
         appIcon.height = 120;
 
+        const appVersion = document.createElement("div");
+        appVersion.className = "appVersion";
+        appVersion.textContent = data.version;
+
         appContainer.appendChild(appIcon);
+        appContainer.appendChild(appVersion);
     }
 
     return appContainer;

@@ -52,13 +52,17 @@ body {
     gap: 20px;
 }
 
+.appVersion {
+    font-size: 30px;
+    font-weight: bold;
+    color: #0061a7;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
 .asset {
     display: flex;
     gap: 20px;
-}
-
-.appContainer > img {
-    margin-bottom: 50px;
 }
 
 .downloadButton {
@@ -85,4 +89,17 @@ body {
 .downloadButton:active {
     position: relative;
     top: 1px;
+}
+
+#loader {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    margin-top: 50px;
+}
+
+#loader span {
+    font-size: 22px;
 }

@@ -42,8 +42,8 @@ def main(msg: func.QueueMessage) -> None:
     logging.info('Python queue trigger function processed a queue item: %s',
                  msg.get_body().decode('utf-8'))
 
-    app_data = []
-    
+    app_data = get_local_app_data()
+
     for repo in repos:
         url = "https://api.github.com/repos/" + repo["user_name"] + "/" + repo["repo_name"] + "/releases/latest"
         
@@ -51,34 +51,40 @@ def main(msg: func.QueueMessage) -> None:
             with request.urlopen(url) as response:
                 data = response.read()
                 release = json.loads(data)
-                
-                for asset in release["assets"]:
-                    download_url = asset["browser_download_url"]
-                    if not re.search(".(dmg|exe|deb|zip|AppImage|apk|jar)$", download_url, flags=re.I):
-                        continue
 
-                    logging.info(f'Downloading: {download_url}')
+                app_name = get_common_app_name(repo["repo_name"])
+                repo_name = repo["repo_name"]
+                app_version = release["tag_name"]
 
-                    path = urlparse(download_url).path
-                    file_name = basename(path)
+                if not app_exists(app_data, repo_name, app_version):
+                    app_data = remove_old_app(app_data, repo_name)
+                    for asset in release["assets"]:
+                        download_url = asset["browser_download_url"]
+                        if not re.search(".(dmg|exe|deb|zip|AppImage|apk|jar)$", download_url, flags=re.I):
+                            continue
 
-                    blob_url = upload_file(download_url, file_name)
+                        logging.info(f'Downloading: {download_url}')
 
-                    asset_data = {
-                        "name": get_common_app_name(repo["repo_name"]),
-                        "version": release["tag_name"],
-                        "size": asset["size"],
-                        "date": asset["updated_at"],
-                        "os": get_os_from_path(path),
-                        "url": blob_url
-                    }
+                        path = urlparse(download_url).path
+                        file_name = basename(path)
 
-                    app_data.append(asset_data)
+                        blob_url = upload_file(download_url, file_name)
 
-                upload_app_data(app_data)
+                        asset_data = {
+                            "name": app_name,
+                            "repo_name": repo_name,
+                            "version": app_version,
+                            "size": asset["size"],
+                            "date": asset["updated_at"],
+                            "os": get_os_from_path(path),
+                            "url": blob_url
+                        }
 
+                        app_data.append(asset_data)
         except Exception as e:
             print(e)
+
+    upload_app_data(app_data)
 
 def get_os_from_path(path: str) -> str:
     """Return the os name based on file extension"""
@@ -161,3 +167,29 @@ def get_common_app_name(name: str) -> str:
         app_name = "BTT-Writer"
     
     return app_name
+
+def get_local_app_data() -> list:
+    """Read local version of app_data.json from blob storage"""
+    blob_client = blob_service_client.get_container_client(container=CONTAINER_NAME)
+    app_data = []
+
+    try:
+        app_data_str = blob_client.download_blob("app_data.json").readall()
+        app_data = json.loads(app_data_str)
+    except Exception as e:
+        logging.info(e)
+
+    return app_data
+
+def app_exists(app_data: list, repo_name: str, version: str) -> bool:
+    """Check if app version is different"""
+    exists = False
+    for app in app_data:
+        if "repo_name" in app and app["repo_name"] == repo_name and app["version"] == version:
+            exists = True
+
+    return exists
+
+def remove_old_app(app_data: list, repo_name: str) -> list:
+    """Remove old app from the list"""
+    return [app for app in app_data if "repo_name" in app and app["repo_name"] != repo_name]
