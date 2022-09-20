@@ -6,7 +6,7 @@ body {
 #main {
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    gap: 40px;
 }
 
 #header {
@@ -28,18 +28,18 @@ body {
 }
 
 .infoTitle {
-    font-size: 50px;
+    font-size: 40px;
     font-weight: bold;
 }
 
 .infoDescription {
-    font-size: 30px;
+    font-size: 20px;
     color: rgb(99, 99, 99);
 }
 
 #tools {
     display: flex;
-    gap: 50px;
+    gap: 40px;
     justify-content: center;
 }
 
@@ -53,10 +53,10 @@ body {
 }
 
 .appVersion {
-    font-size: 30px;
+    font-size: 25px;
     font-weight: bold;
     color: #0061a7;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
     text-align: center;
 }
 

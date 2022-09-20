@@ -30,7 +30,7 @@ function createAppContainer(data) {
 
         const appIcon = document.createElement("img");
         appIcon.src = "images/tools/" + data.name + ".png";
-        appIcon.height = 120;
+        appIcon.height = 100;
 
         const appVersion = document.createElement("div");
         appVersion.className = "appVersion";
@@ -49,7 +49,7 @@ function createAssetContainer(data) {
 
     const osIcon = document.createElement("img");
     osIcon.src = "images/os/" + data.os + ".png";
-    osIcon.height = 50;
+    osIcon.height = 30;
 
     const downloadButton = document.createElement("a");
     downloadButton.href = data.url;
