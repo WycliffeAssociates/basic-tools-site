@@ -9,6 +9,7 @@ from urllib import request
 from urllib.parse import urlparse
 import azure.functions as func
 from azure.storage.blob import BlobServiceClient
+from azure.storage.blob import ContentSettings
 
 repos = [
     {
@@ -137,7 +138,7 @@ def upload_app_data(app_data: List):
     try:
         blob_client = blob_service_client.get_blob_client(container=CONTAINER_NAME, blob="app_data.json")
         json_data = json.dumps(app_data, indent=4)
-        res = blob_client.upload_blob(json_data.encode("ascii"), overwrite=True)
+        res = blob_client.upload_blob(json_data.encode("ascii"), overwrite=True, content_settings=ContentSettings(content_type='application/json'))
         logging.info(res)
     except Exception as e:
         logging.info(e)
