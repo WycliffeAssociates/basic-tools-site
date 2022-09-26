@@ -1,6 +1,6 @@
 import api from './config.js'
 
-fetch(`${api}/get-app-data`)
+fetch(`https://basictranslationtooa666.blob.core.windows.net/releases/app_data.json`)
     .then((response) => response.json())
     .then((data) => renderContents(data));
 
