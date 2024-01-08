@@ -3,7 +3,7 @@
   "bindings": [
     {
       "schedule": "0 0 0 * * 0",
-      "name": "updateTimer",
+      "name": "updatetimer",
       "type": "timerTrigger",
       "direction": "in"
     },
