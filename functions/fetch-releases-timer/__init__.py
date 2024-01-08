@@ -1,7 +1,9 @@
 import logging
+import datetime
 import azure.functions as func
 
-def main(req: func.HttpRequest, msg: func.Out[str]) -> func.HttpResponse:
+def main(updatetimer: func.TimerRequest) -> None:
+    utc_timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
     """Main script to run the function"""
     logging.info('Sending queue message to start fetching releases')
 

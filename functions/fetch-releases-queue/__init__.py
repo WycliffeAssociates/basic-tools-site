@@ -110,6 +110,10 @@ def get_os_from_filename(file_name: str) -> str:
         os = "Osx"
     elif re.search("(windows|win)", file_name, re.I):
         os = "Windows"
+        if re.search("32", file_name, re.I):
+            os = "Windows32"
+        if re.search("64", file_name, re.I):
+            os = "Windows64"
     elif re.search("linux", file_name, re.I):
         os = "Linux"
     elif re.search("android", file_name, re.I):
@@ -130,6 +134,8 @@ def get_os_from_extension(ext: str) -> str:
         os = "Linux"
     elif ext == ".apk":
         os = "Android"
+    elif ext == ".zip":
+        os = "Zip"
 
     return os
 
