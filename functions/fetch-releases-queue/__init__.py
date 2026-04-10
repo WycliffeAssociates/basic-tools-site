@@ -36,6 +36,8 @@ repos = [
 
 CONTAINER_NAME = "releases"
 CONNECTION_STRING = environ['AZURE_STORAGE_CONNECTION_STRING']
+GITHUB_TOKEN = environ.get('GITHUB_TOKEN', '')
+
 blob_service_client = BlobServiceClient.from_connection_string(CONNECTION_STRING)
 
 def main(msg: func.QueueMessage) -> None:
@@ -49,6 +51,11 @@ def main(msg: func.QueueMessage) -> None:
         url = "https://api.github.com/repos/" + repo["user_name"] + "/" + repo["repo_name"] + "/releases/latest"
         
         try:
+            req = request.Request(url)
+            req.add_header('User-Agent', 'basic-tools-site')
+            if GITHUB_TOKEN:
+                req.add_header('Authorization', f'token {GITHUB_TOKEN}')
+
             with request.urlopen(url) as response:
                 data = response.read()
                 release = json.loads(data)
