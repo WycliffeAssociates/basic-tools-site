@@ -9,6 +9,7 @@ from urllib import request
 from urllib.parse import urlparse
 import azure.functions as func
 from azure.storage.blob import BlobServiceClient
+from azure.storage.blob import ContentSettings
 
 repos = [
     {
@@ -109,6 +110,10 @@ def get_os_from_filename(file_name: str) -> str:
         os = "Osx"
     elif re.search("(windows|win)", file_name, re.I):
         os = "Windows"
+        if re.search("32", file_name, re.I):
+            os = "Windows32"
+        if re.search("64", file_name, re.I):
+            os = "Windows64"
     elif re.search("linux", file_name, re.I):
         os = "Linux"
     elif re.search("android", file_name, re.I):
@@ -129,6 +134,8 @@ def get_os_from_extension(ext: str) -> str:
         os = "Linux"
     elif ext == ".apk":
         os = "Android"
+    elif ext == ".zip":
+        os = "Zip"
 
     return os
 
@@ -137,7 +144,7 @@ def upload_app_data(app_data: List):
     try:
         blob_client = blob_service_client.get_blob_client(container=CONTAINER_NAME, blob="app_data.json")
         json_data = json.dumps(app_data, indent=4)
-        res = blob_client.upload_blob(json_data.encode("ascii"), overwrite=True)
+        res = blob_client.upload_blob(json_data.encode("ascii"), overwrite=True, content_settings=ContentSettings(content_type='application/json'))
         logging.info(res)
     except Exception as e:
         logging.info(e)

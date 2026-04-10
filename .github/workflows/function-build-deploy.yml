@@ -6,6 +6,8 @@ name: Build/Deploy Function App - basicttdlpage-func-nonprod-use2
 
 on:
   push:
+    paths:
+      - functions/**
     branches:
       - master
   workflow_dispatch:
